@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import QRCode from "qrcode"; 
+import QRCode from "react-qr-code";
 const Upi = () => {
     const { id } = useParams();
     const [upi, setUpi] = useState({});
