@@ -66,18 +66,8 @@ const Upi = () => {
        
         const totalPrice = upi.price; // Get price from API response
         const upiUrl = `upi://pay?pa=Testupi@techgenzi&pn=Merchant&mc=1234&tid=Txn001&tr=Order${id}&am=${totalPrice}&cu=INR`;
-
-        // Generate QR Code Image
-        QRCode.toDataURL(upiUrl, { width: 200 }, (err, url) => {
-            if (err) {
-                
-                console.error(err);
-            } 
-            else{
-                setQrCode(url);
-            }
-            
-        });
+        setQrCode(upiUrl);
+      
     };
 
     const handleplaceOrder = () => {
@@ -143,7 +133,8 @@ const Upi = () => {
             {qrCode && (
                 <div className="upi-qrcode-container">
                     <h4>Scan the QR Code to Pay</h4>
-                    <img src={qrCode} alt="UPI QR Code" width="200" />
+                    {/* <img src={qrCode} alt="UPI QR Code" width="200" /> */}
+                    <QRCode value={qrCode} size={200} />
                     <p className="upi-statement">Use GPay or any UPI app to scan and pay</p>
                     <h2 className="upi-return">Return policy</h2>
                     <p className="upi-reurn-policy">Returns accepted within 15-30 days, items must be unused, original packaging required, return shipping paid by customer, refunds processed after verification. </p>

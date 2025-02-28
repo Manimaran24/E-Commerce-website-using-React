@@ -19,7 +19,7 @@ function Navbar({ query, setQuery }) {
 
   return (
     <div className="navbar">
-      <h2>Logo</h2>
+      <h2>QuickCart</h2>
       <div className="search">
         <input
           type="text"
