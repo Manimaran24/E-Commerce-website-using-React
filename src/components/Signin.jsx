@@ -1,16 +1,13 @@
-
 import React, { useState } from 'react';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
+function Signin({ setSignedin }) {
+  const navigate = useNavigate();
 
-function Login({setSignedin}) {
-  const navigate=useNavigate();
- 
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -22,22 +19,26 @@ function Login({setSignedin}) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
    
-    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
 
-    if (storedUser.email === formData.email &&
-    storedUser.password === formData.password) {
-      
-     
+    //  user exists
+    const foundUser = storedUsers.find(
+      (user) => user.email === formData.email && user.password === formData.password
+    );
+
+    if (foundUser) {
+      localStorage.setItem('loginUser', JSON.stringify(foundUser)); 
+      localStorage.setItem('Status', 'true'); 
       setSignedin(true);
-      navigate("/");
-    }else {
-      
-alert("please signup")
-    
-    } 
+      alert("Login successful!");
+      navigate('/Store'); 
+    } else {
+      alert("Invalid credentials! Please sign up first.");
+      navigate('/Signup'); 
+    }
   };
-
 
   return (
     <div className='signin-container'>
@@ -58,21 +59,18 @@ alert("please signup")
           <input className='signin-field'
             type='password'
             id='password'
-            autoComplete='on'
+            autoComplete='off'
             placeholder='Enter your password'
             value={formData.password}
             onChange={handleChange}
             required
           />
-          
-         
           <button type='submit' className='signin-button'>Signin</button>
         </div>
       </form>
-      {message && <p>{message}</p>}
       <div className='Login'>
         <p>Don't have an account?</p>
-        <Link to='/Signup'>
+        <Link to='/signup'>
           Signup
         </Link>
       </div>
@@ -80,4 +78,4 @@ alert("please signup")
   );
 }
 
-export default Login;
+export default Signin;

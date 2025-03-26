@@ -12,14 +12,14 @@ function Navbar({ query, setQuery }) {
   };
 
   const [menu, setMenu] = useState(false);
-
+//if i click a option the menu will close
   const handleNavClick = () => {
     setMenu(false);
   };
 
   return (
     <div className="navbar">
-      <h2>QuickCart</h2>
+      <h2>Logo</h2>
       <div className="search">
         <input
           type="text"
@@ -32,10 +32,11 @@ function Navbar({ query, setQuery }) {
       <div className="menubutton" onClick={() => setMenu(!menu)}>
         {menu ? <IoClose />: <IoMenu/>}
       </div>
+      {/* //className dynamically change like nav-menu open= nav-menu-close */}
       <div className={`nav-menu ${menu ? "open" : ""}`}>
         <ul>
           <li className="nav" onClick={handleNavClick}>
-            <Link to="/">Store</Link>
+            <Link to="/Store">Store</Link>
           </li>
           <li className="nav1" onClick={handleNavClick}>
             <Link to="/Account">Account</Link>

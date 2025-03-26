@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams,  } from "react-router-dom"
+import { useParams, useLocation } from "react-router-dom"
 import { useNavigate } from "react-router-dom";
 // import "./Cod.css";
 
@@ -7,7 +7,10 @@ import { useNavigate } from "react-router-dom";
 const Cod = () => {
     const{id}=useParams();
     const[cod,setCod]=useState({});
-    
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const productQty = parseInt(queryParams.get("qty")) || 1;
+
          const [formData, setFormData] = useState({
                 name: '',
                 phone: '',
@@ -99,7 +102,7 @@ const Cod = () => {
     
     <h2 className="cod-product-name">{cod.title}</h2>
     
-    <h3 className="cod-price">Price: ${cod.price}</h3>
+    <h3 className="cod-price">Price: ${cod.price*productQty}</h3>
     <form onSubmit={handleSubmit}> 
     <input className="upi-name"
                 type="text"
@@ -128,7 +131,7 @@ const Cod = () => {
      <br></br>
     <button className="cod-order-button" onClick={handlePlaceOrder}>Place Your Order</button>
     
-    < button type='button' className="cod-cancel-button" onClick={() => navigate("/")}>Cancel</button>
+    < button type='button' className="cod-cancel-button" onClick={() => navigate("/Store")}>Cancel</button>
     </form>
 </div>
 

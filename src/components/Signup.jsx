@@ -21,7 +21,7 @@ function Signup() {
         let valid = true;
         let newError = { name: '', email: '', password: '' };
 
-        // Name Validation
+       
         if (!/^[A-Za-z\s]+$/.test(formData.name.trim())) {
             newError.name = 'Name must contain only letters';
             valid = false;
@@ -30,13 +30,13 @@ function Signup() {
             valid = false;
         }
 
-        
+     
         if (!validator.isEmail(formData.email.trim())) {
             newError.email = 'Enter a valid email!';
             valid = false;
         }
 
-        // Password Validation
+      
         if (formData.password.length < 6) {
             newError.password = 'Password must be at least 6 characters';
             valid = false;
@@ -54,13 +54,24 @@ function Signup() {
         e.preventDefault();
 
         if (!validateForm()) {
-            return; //stop
+            return; 
         }
 
-        // Save user data to localStorage
-        localStorage.setItem('user', JSON.stringify(formData));
+        
+        let storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+        
+        if (storedUsers.some(user => user.email === formData.email)) {
+            alert("Email already registered. Please sign in.");
+            navigate('/');
+            return;
+        }
 
-        navigate('/login');
+        // Add  new user 
+        storedUsers.push(formData);
+        localStorage.setItem('users', JSON.stringify(storedUsers));
+
+        alert("Signup successful! Please sign in.");
+        navigate('/'); 
     };
 
     return (
@@ -111,7 +122,7 @@ function Signup() {
             </form>
             <div className='Login'>
                 <p>Already have an account?</p>
-                <Link to='/login'>Login</Link>
+                <Link to='/'>Login</Link>
             </div>
         </div>
     );

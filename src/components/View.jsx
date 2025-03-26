@@ -7,7 +7,7 @@ function View() {
   const { id } = useParams();//
   const [view, setView] = useState({})
   const [wishlist, setWishlist] = useState(() => {
-    return JSON.parse(localStorage.getItem("wishlist")) || []; // Ensure it starts as an array
+    return JSON.parse(localStorage.getItem("wishlist")) || []; 
   });
   useEffect(() => {
     if (!id) return;
@@ -15,10 +15,10 @@ function View() {
       .then(res => res.json())
       .then(data => setView(data))
       .catch(err => console.log(err))
-  }, [id]);
+  }, [id]);// run id changes
   const addCart = () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const ProductCart = cart.find((item) => item.id === view.id)//
+    const ProductCart = cart.find((item) => item.id === view.id)//check already in cart
     if (!ProductCart) {
       cart.push(view);
       localStorage.setItem("cart", JSON.stringify(cart));
@@ -53,7 +53,9 @@ function View() {
       <h2>{view.title}</h2>
       <p>{view.description}</p>
       <h3 className="price">${view.price}</h3>
+      
       {view.dicountPercentage}
+      
       <p>
         {`Rating: ${view.rating} | `}
         {`Stock: ${view.stock} | `}
@@ -70,7 +72,7 @@ function View() {
         <button onClick={addCart}>Add to cart</button>
 
         < Link to={`/Buynow/${id}`}><button onClick={() => Navigate(`Buynow/${id}`)}>Buy now</button></Link>
-        <Link to="/"><button><FaCircleArrowLeft /></button></Link>
+        <Link to="/Store"><button><FaCircleArrowLeft /></button></Link>
 
       </div>
 

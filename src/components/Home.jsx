@@ -2,20 +2,20 @@ import React, { useState, useEffect } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { IoStar } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-// import "./Home.css";
+
 
 function Home({ query }) {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [category, setCategory] = useState("");
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState([]);//api categorries
     const [currentPage, setCurrentPage] = useState(1);
     const postPerPage = 12;
     const totalPages = Math.ceil(data.length / postPerPage);
     const indexOfLastPost = currentPage * postPerPage;
     const indexOfFirstPost = indexOfLastPost - postPerPage;
     const [wishlist, setWishlist] = useState(() => {
-        return JSON.parse(localStorage.getItem("wishlist")) || []; // Ensure it starts as an array
+        return JSON.parse(localStorage.getItem("wishlist")) || []; // json.parse=>string "[1,2,3]"
     });
 
 
@@ -40,7 +40,7 @@ function Home({ query }) {
     }, []);
     useEffect(() => {
         let url = category
-            ? `https://dummyjson.com/products/category/${category}`
+            ? `https://dummyjson.com/products/category/${category}`//if selecct a category it will show selected category only
             : "https://dummyjson.com/products";
 
 
@@ -48,7 +48,7 @@ function Home({ query }) {
             .then((res) => res.json())
             .then((data) => setData(data.products))
             .catch((err) => console.log(err));
-    }, [category]);
+    }, [category]);//run category changes
 
 
     const fpost = data.filter((product) =>
@@ -58,7 +58,7 @@ function Home({ query }) {
         product.rating?.toString().includes(query) || product.description?.toLowerCase().includes(query.toLowerCase())
 
     );
-    const currentPosts = fpost.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = fpost.slice(indexOfFirstPost, indexOfLastPost);//show only filtered products
     const handleChange = (event) => {
         setCategory(event.target.value);
         setCurrentPage(1);

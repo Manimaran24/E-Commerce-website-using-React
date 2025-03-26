@@ -1,14 +1,15 @@
 
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate,useLocation } from "react-router-dom";
 import QRCode from "react-qr-code";
 const Upi = () => {
     const { id } = useParams();
     const [upi, setUpi] = useState({});
-
     const [qrCode, setQrCode] = useState(""); // Store QR Code image URL
-    
-    const navigate = useNavigate();
+      const navigate = useNavigate();
+      const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const productQty = parseInt(queryParams.get("qty")) || 1;
          const [formData, setFormData] = useState({
                 name: '',
                 phone: '',
@@ -57,15 +58,15 @@ const Upi = () => {
             .catch(err => console.log(err));
     }, [id]);
 
-    // Function to Generate UPI Payment QR Code
+    
     const generateQrCode = () => {
         if (!validateForm() ) {
             alert("Please fill in all details before generating the QR code.");
             return;
         }
        
-        const totalPrice = upi.price; // Get price from API response
-        const upiUrl = `upi://pay?pa=Testupi@techgenzi&pn=Merchant&mc=1234&tid=Txn001&tr=Order${id}&am=${totalPrice}&cu=INR`;
+        const totalPrice = upi.price; 
+        const upiUrl = `upi://pay?pa=muruganmani1504@okaxis&pn=Merchant&mc=1234&tid=Txn001&tr=Order${id}&am=${totalPrice*productQty}&cu=INR`;
         setQrCode(upiUrl);
       
     };
@@ -74,6 +75,10 @@ const Upi = () => {
         if (!validateForm()) {
             alert("Please fill in all details before placing your order.");
             return;
+            
+        }
+        else{
+            alert('order placed successfully!!')
         }
 
         fetch("https://dummyjson.com/carts/add", {
@@ -83,7 +88,7 @@ const Upi = () => {
                 userId: 1,
                 products: [{ id: upi.id, quantity: 1 }],
                 paymentMethod: "UPI",
-                upiId: "Testupi@techgenzi", 
+                upiId: "muruganmani1504@okaxis", 
                 amount: upi.price, 
                 name: name,
                 phone: phone,
@@ -100,7 +105,7 @@ const Upi = () => {
 
             <img className="upi-image" src={upi.thumbnail} alt={upi.title} width="150" />
             <h2 className="upi-product-name">{upi.title}</h2>
-            <h3 className="upi-price"> ₹{upi.price}</h3> {/* Render amount from API */}
+            <h3 className="upi-price"> ${upi.price*productQty}</h3> 
 
             <input className="upi-name"
                 type="text"
@@ -129,11 +134,11 @@ const Upi = () => {
 <span className="error">{error.address}</span>
            
 
-            {/* /* Display QR Code if generated */ }
+            
             {qrCode && (
                 <div className="upi-qrcode-container">
                     <h4>Scan the QR Code to Pay</h4>
-                    {/* <img src={qrCode} alt="UPI QR Code" width="200" /> */}
+
                     <QRCode value={qrCode} size={200} />
                     <p className="upi-statement">Use GPay or any UPI app to scan and pay</p>
                     <h2 className="upi-return">Return policy</h2>
@@ -147,7 +152,7 @@ const Upi = () => {
             <button className="upi-orderbutton" onClick={handleplaceOrder}>
                 Place Your Order
             </button>
-            <button className="upi-cancelbutton" onClick={() => navigate("/")}>Cancel</button>
+            <button className="upi-cancelbutton" onClick={() => navigate("/Store")}>Cancel</button>
             </div>
         </div>
     );
